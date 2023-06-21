@@ -22,9 +22,9 @@
     "--TempDir" : "s3://aws-glue-assets-363945567393-us-west-1/temporary/",
     "--enable-auto-scaling" : "true"
   },
-  "maxRetries" : 0,
+  "maxRetries" : 1,
   "allocatedCapacity" : 5,
-  "timeout" : 20,
+  "timeout" : 30,
   "maxCapacity" : 5.0,
   "glueVersion" : "4.0",
   "numberOfWorkers" : 5,
