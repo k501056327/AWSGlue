@@ -1,0 +1,39 @@
+{
+  "name" : "ecomm Demo",
+  "description" : "",
+  "role" : "arn:aws:iam::363945567393:role/AWSGlueServiceRole",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-363945567393-us-west-1/scripts/ecomm Demo.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-363945567393-us-west-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-363945567393-us-west-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 5,
+  "timeout" : 20,
+  "maxCapacity" : 5.0,
+  "glueVersion" : "3.0",
+  "numberOfWorkers" : 5,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1687823099249\":{\"S3CatalogSource\":{\"AdditionalOptions\":{},\"Database\":\"raw-ecomm\",\"Name\":\"order\",\"PartitionPredicate\":\"\",\"Table\":\"order\"}},\"node-1687840925907\":{\"SelectFromCollection\":{\"Index\":0,\"Inputs\":[\"node-1687840925838\"],\"Name\":\"default_group\"}},\"node-1687838840269\":{\"S3GlueParquetTarget\":{\"Compression\":\"snappy\",\"Inputs\":[\"node-1687840925907\"],\"Name\":\"Amazon S3\",\"PartitionKeys\":[],\"Path\":\"s3://3639-datalake-silver/ecomm/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1687840925909\":{\"SelectFromCollection\":{\"Index\":0,\"Inputs\":[\"node-1687840925838\"],\"Name\":\"output_group_1\"}},\"node-1687823131407\":{\"SparkSQL\":{\"Inputs\":[\"node-1687823097927\",\"node-1687823099249\",\"node-1687823100087\"],\"Name\":\"SQL Query\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"customer_sk\",\"Type\":\"bigint\"},{\"Name\":\"current_addr_sk\",\"Type\":\"string\"},{\"Name\":\"first_name\",\"Type\":\"string\"},{\"Name\":\"last_name\",\"Type\":\"string\"},{\"Name\":\"order_nbr\",\"Type\":\"bigint\"},{\"Name\":\"order_dt\",\"Type\":\"string\"},{\"Name\":\"qty\",\"Type\":\"bigint\"},{\"Name\":\"item_list_price\",\"Type\":\"double\"},{\"Name\":\"sales_price\",\"Type\":\"double\"},{\"Name\":\"ext_sales_price\",\"Type\":\"double\"},{\"Name\":\"brand\",\"Type\":\"string\"},{\"Name\":\"item_name\",\"Type\":\"string\"},{\"Name\":\"item_category\",\"Type\":\"string\"}]}],\"SqlAliases\":[{\"Alias\":\"customer\",\"From\":\"node-1687823097927\"},{\"Alias\":\"order\",\"From\":\"node-1687823099249\"},{\"Alias\":\"product\",\"From\":\"node-1687823100087\"}],\"SqlQuery\":\"Select \\n      c.customer_sk\\n    , c.current_addr_sk\\n    , c.first_name\\n    , c.last_name\\n    , o.order_nbr\\n    , o.order_dt\\n    , o.qty\\n    , o.item_list_price\\n    , o.sales_price\\n    , o.ext_sales_price\\n    , p.brand\\n    , p.item_name\\n    , p.item_category\\nFrom customer AS c\\n    Inner JOIN order AS o\\n        ON c.customer_sk = o.bill_to_customer_sk\\n    Inner JOIN product AS p\\n        ON o.item_sk = p.item_sk\"}},\"node-1687840946003\":{\"S3DirectTarget\":{\"Compression\":\"none\",\"Format\":\"json\",\"Inputs\":[\"node-1687840925909\"],\"Name\":\"Amazon S3\",\"PartitionKeys\":[],\"Path\":\"s3://3639-datalake-silver/rejectedrecords/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1687823097927\":{\"S3CatalogSource\":{\"AdditionalOptions\":{},\"Database\":\"raw-ecomm\",\"Name\":\"customer\",\"PartitionPredicate\":\"\",\"Table\":\"customer\"}},\"node-1687823100087\":{\"S3CatalogSource\":{\"AdditionalOptions\":{},\"Database\":\"raw-ecomm\",\"Name\":\"product\",\"PartitionPredicate\":\"\",\"Table\":\"product\"}},\"node-1687840925838\":{\"Route\":{\"GroupFiltersList\":[{\"Filters\":[],\"GroupName\":\"default_group\",\"LogicalOperator\":\"AND\"},{\"Filters\":[{\"Negated\":false,\"Operation\":\"LTE\",\"Values\":[{\"Type\":\"COLUMNEXTRACTED\",\"Value\":[\"ext_sales_price\"]},{\"Type\":\"CONSTANT\",\"Value\":[\"0\"]}]}],\"GroupName\":\"output_group_1\",\"LogicalOperator\":\"AND\"}],\"Inputs\":[\"node-1687823131407\"],\"Name\":\"Conditional Router\"}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "AWSGlue",
+    "branch" : "Initial-Dev",
+    "folder" : "ecomm Demo"
+  }
+}
